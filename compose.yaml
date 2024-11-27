@@ -1,12 +1,8 @@
 ﻿services:
-  api:
-    image: api
-    build:
-      context: .
-      dockerfile: API/Dockerfile
-
   presentation:
     image: presentation
     build:
       context: .
       dockerfile: src/External/Presentation/Dockerfile
+    ports:
+        - "8080:8080"

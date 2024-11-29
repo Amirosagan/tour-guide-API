@@ -8,10 +8,10 @@
 
     <ItemGroup>
       <Folder Include="Entities\" />
-      <Folder Include="Errors\" />
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="ErrorOr" Version="2.0.1" />
       <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.0" />
     </ItemGroup>
 

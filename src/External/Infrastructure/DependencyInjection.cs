@@ -4,6 +4,7 @@ using Domain.Identity;
 using Infrastructure.Data;
 using Infrastructure.JwtAuthentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,7 +29,9 @@ public static class DependencyInjection
             o.Password.RequireLowercase = true;
             o.Password.RequireUppercase = true;
             o.Password.RequiredLength = 8;
-        }).AddEntityFrameworkStores<ApplicationDbContext>();
+        })
+        .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>();
         
         services.AddIdentityCore<TourGuide>(o =>
         {
@@ -37,7 +40,9 @@ public static class DependencyInjection
             o.Password.RequireLowercase = true;
             o.Password.RequireUppercase = true;
             o.Password.RequiredLength = 8;
-        }).AddEntityFrameworkStores<ApplicationDbContext>();
+        })
+        .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<ApplicationDbContext>();
         
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddDbContext<ApplicationDbContext>(options =>

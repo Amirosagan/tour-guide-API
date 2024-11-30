@@ -30,7 +30,8 @@ public class UserRegisterCommandHandler : IRequestHandler<UserRegisterCommand, E
             FirstName = request.FirstName,
             LastName = request.LastName,
             PhoneNumber = request.PhoneNumber,
-            OAuthUser = false
+            OAuthUser = false,
+            ProfilePictureUrl = request.ProfilePictureUrl
         };
         
         var emailExist = await _normalUserManager.FindByEmailAsync(request.Email);

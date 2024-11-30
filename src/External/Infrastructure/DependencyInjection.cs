@@ -2,6 +2,7 @@ using System.Text;
 using Application.Interfaces;
 using Domain.Identity;
 using Infrastructure.Data;
+using Infrastructure.Google;
 using Infrastructure.JwtAuthentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -17,8 +18,11 @@ public static class DependencyInjection
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
         var jwtSettings = new JwtSettings();
+        var oAuthGoogleSettings = new OAuthGoogleSettings();
+        configuration.Bind(nameof(OAuthGoogleSettings), oAuthGoogleSettings);
         configuration.Bind(nameof(JwtSettings), jwtSettings);
         services.AddSingleton(jwtSettings);
+        services.AddSingleton(oAuthGoogleSettings);
         
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 
@@ -47,7 +51,7 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseSqlServer(connectionString));
-        
+
         services.AddAuthentication(cfg =>
             {
                 cfg.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -64,7 +68,6 @@ public static class DependencyInjection
                 ValidAudience = jwtSettings.Audience,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key))
             });
-        
         services.AddAuthorization();
 
         return services;

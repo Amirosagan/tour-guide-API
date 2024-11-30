@@ -9,5 +9,6 @@ public record UserRegisterCommand(
     string Password,
     string FirstName,
     string LastName,
-    string PhoneNumber
+    string PhoneNumber,
+    string? ProfilePictureUrl
     ) : IRequest<ErrorOr<AuthenticationResponse>>;

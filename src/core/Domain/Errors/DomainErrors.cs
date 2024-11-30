@@ -10,4 +10,8 @@ public static class DomainErrors
         public static Error DuplicatePhoneNumber(string phoneNumber) => Error.Conflict(description: $"Phone number {phoneNumber} is already taken.");
         public static Error ServerError() => Error.Failure(description: "An error occurred while registering the user.");
     }
+    public static class UserLogin
+    {
+        public static Error InvalidCredentials() => Error.Unauthorized(description: "Invalid email or password.");
+    }
 }

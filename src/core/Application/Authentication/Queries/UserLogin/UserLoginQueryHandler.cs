@@ -28,6 +28,10 @@ public class UserLoginQueryHandler : IRequestHandler<UserLoginQuery, ErrorOr<Aut
         var normalUser = await _normalUserManger.FindByEmailAsync(request.Email);
         if (normalUser != null)
         {
+            if (!normalUser.EmailConfirmed)
+            {
+                return DomainErrors.UserLogin.EmailNotConfirmed();
+            }
             var result = await _normalUserManger.CheckPasswordAsync(normalUser, request.Password);
             if (!result)
             {
@@ -40,6 +44,10 @@ public class UserLoginQueryHandler : IRequestHandler<UserLoginQuery, ErrorOr<Aut
         var tourGuidUser = await _tourGuideManager.FindByEmailAsync(request.Email);
         if (tourGuidUser != null)
         {
+            if (tourGuidUser.EmailConfirmed)
+            {
+                return DomainErrors.UserLogin.EmailNotConfirmed();
+            }
             var result = await _tourGuideManager.CheckPasswordAsync(tourGuidUser, request.Password);
             if (!result)
             {

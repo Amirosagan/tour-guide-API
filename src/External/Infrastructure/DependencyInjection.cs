@@ -2,6 +2,7 @@ using System.Text;
 using Application.Interfaces;
 using Domain.Identity;
 using Infrastructure.Data;
+using Infrastructure.EmailService;
 using Infrastructure.Google;
 using Infrastructure.JwtAuthentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -19,12 +20,16 @@ public static class DependencyInjection
     {
         var jwtSettings = new JwtSettings();
         var oAuthGoogleSettings = new OAuthGoogleSettings();
+        var emailSettings = new EmailSettings();
         configuration.Bind(nameof(OAuthGoogleSettings), oAuthGoogleSettings);
         configuration.Bind(nameof(JwtSettings), jwtSettings);
+        configuration.Bind(nameof(EmailSettings), emailSettings);
         services.AddSingleton(jwtSettings);
         services.AddSingleton(oAuthGoogleSettings);
+        services.AddSingleton(emailSettings);
         
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddScoped<IEmailServiceSender, EmailServiceSender>();
 
         services.AddIdentityCore<NormalUser>(o =>
         {
@@ -33,9 +38,11 @@ public static class DependencyInjection
             o.Password.RequireLowercase = true;
             o.Password.RequireUppercase = true;
             o.Password.RequiredLength = 8;
+            o.SignIn.RequireConfirmedEmail = true;
         })
         .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
         
         services.AddIdentityCore<TourGuide>(o =>
         {
@@ -46,7 +53,8 @@ public static class DependencyInjection
             o.Password.RequiredLength = 8;
         })
         .AddRoles<IdentityRole>()
-            .AddEntityFrameworkStores<ApplicationDbContext>();
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
         
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddDbContext<ApplicationDbContext>(options =>

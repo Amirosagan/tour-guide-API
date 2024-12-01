@@ -10,18 +10,20 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Authentication.Commands.UserRegister;
 
-public class UserRegisterCommandHandler : IRequestHandler<UserRegisterCommand, ErrorOr<AuthenticationResponse>>
+public class UserRegisterCommandHandler : IRequestHandler<UserRegisterCommand, ErrorOr<UserRegisterCommandResponse>>
 {
     private readonly UserManager<NormalUser> _normalUserManager;
     private readonly IJwtTokenGenerator _jwtTokenGenerator;
+    private readonly IEmailServiceSender _emailServiceSender;
 
-    public UserRegisterCommandHandler(UserManager<NormalUser> normalUserManager, IJwtTokenGenerator jwtTokenGenerator)
+    public UserRegisterCommandHandler(UserManager<NormalUser> normalUserManager, IJwtTokenGenerator jwtTokenGenerator, IEmailServiceSender emailServiceSender)
     {
         _normalUserManager = normalUserManager;
         _jwtTokenGenerator = jwtTokenGenerator;
+        _emailServiceSender = emailServiceSender;
     }
 
-    public async Task<ErrorOr<AuthenticationResponse>> Handle(UserRegisterCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<UserRegisterCommandResponse>> Handle(UserRegisterCommand request, CancellationToken cancellationToken)
     {
         var user = new NormalUser
         {
@@ -57,8 +59,10 @@ public class UserRegisterCommandHandler : IRequestHandler<UserRegisterCommand, E
 
         await _normalUserManager.AddToRoleAsync(user, Roles.NormalUser.ToString());
 
-        var jwtToken = _jwtTokenGenerator.GenerateToken(user, Roles.NormalUser.ToString());
+        var code = await _normalUserManager.GenerateEmailConfirmationTokenAsync(user);
         
-        return new AuthenticationResponse(jwtToken, user.Id, Roles.NormalUser.ToString());
+        await _emailServiceSender.SendEmailAsync(user.Email, "Confirm your email", $"Please confirm your account by clicking this link: https://localhost:5162/Auth/ConfirmEmail?email={user.Email}&token={code}");
+        
+        return new UserRegisterCommandResponse();
     }
 }

@@ -1,6 +1,6 @@
 using Application;
+using Application.Interfaces;
 using Infrastructure;
-using Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Presentation.Seeding.identity;
 

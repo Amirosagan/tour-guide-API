@@ -30,7 +30,7 @@ public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordComman
                 return DomainErrors.UserLogin.EmailNotConfirmed();
             }
             var token = await _normalUserManager.GeneratePasswordResetTokenAsync(user);
-            await _emailServiceSender.SendEmailAsync(request.Email, "Reset your password", $"Please reset your password by clicking this link: https://localhost:5162/Auth/ResetPassword?email={user.Email}&token={token}");
+            await _emailServiceSender.SendEmailAsync(request.Email, "Reset your password", $"Please reset your password by clicking this link: https://localhost:5001/Auth/ResetPassword?email={user.Email}&token={token}");
             return new ForgotPasswordCommandResponse();
         }
         var tourGuide = await _tourGuideManager.FindByEmailAsync(request.Email);
@@ -41,7 +41,7 @@ public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordComman
                 return DomainErrors.UserLogin.EmailNotConfirmed();
             }
             var token = await _tourGuideManager.GeneratePasswordResetTokenAsync(tourGuide);
-            await _emailServiceSender.SendEmailAsync(request.Email, "Reset your password", $"Please reset your password by clicking this link: https://localhost:5162/Auth/ResetPassword?email={tourGuide.Email}&token={token}");
+            await _emailServiceSender.SendEmailAsync(request.Email, "Reset your password", $"Please reset your password by clicking this link: https://localhost:5001/Auth/ResetPassword?email={tourGuide.Email}&token={token}");
             return new ForgotPasswordCommandResponse();
         }
 

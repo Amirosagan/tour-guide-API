@@ -34,7 +34,7 @@ public class GenerateNewConfirmTokenCommandHandler : IRequestHandler<GenerateNew
         
         var token = await _normalUserManager.GenerateEmailConfirmationTokenAsync(user);
         
-        await _emailServiceSender.SendEmailAsync(request.Email, "Confirm your email", $"Please confirm your account by clicking this link: https://localhost:5162/Auth/ConfirmEmail?email={user.Email}&token={token}");
+        await _emailServiceSender.SendEmailAsync(request.Email, "Confirm your email", $"Please confirm your account by clicking this link: https://localhost:5001/Auth/ConfirmEmail?email={user.Email}&token={token}");
         
         return new GenerateNewConfirmTokenCommandResponse();
     }

@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Application.Authentication.Commands.ConfirmEmail;
 using Application.Authentication.Commands.ForgotPassword;
 using Application.Authentication.Commands.GenerateNewConfirmToken;
@@ -6,6 +7,9 @@ using Application.Authentication.Queries.ResetPassword;
 using Application.Authentication.Queries.UserLogin;
 using AutoMapper;
 using MediatR;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Presentation.Contracts.Auth.Requests;
 using Presentation.Contracts.Auth.Responses;
@@ -13,7 +17,7 @@ using Presentation.Contracts.Auth.Responses;
 namespace Presentation.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("auth")]
 public class AuthController : Controller
 {
     private readonly ISender _mediator;
@@ -89,5 +93,26 @@ public class AuthController : Controller
             success => Ok(_mapper.Map<ResetPasswordResponse>(success)),
             BadRequest
         );
+    }
+    
+    [HttpGet("google-login")]
+    public IActionResult GoogleLogin()
+    {
+        var redirectUrl = Url.Action("GoogleSignin", "Auth");
+        var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
+        return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+    }
+    
+    [HttpGet("google-signin")]
+    public async Task<IActionResult> GoogleSignin()
+    {
+        var authenticateResult = await HttpContext.AuthenticateAsync(IdentityConstants.ExternalScheme);
+        if (!authenticateResult.Succeeded || authenticateResult.Principal == null)
+            return Unauthorized();
+        var email = authenticateResult.Principal.FindFirstValue(ClaimTypes.Email);
+        var name = authenticateResult.Principal.FindFirstValue(ClaimTypes.Name);
+        var picture = authenticateResult.Principal.FindFirstValue("picture");
+
+        return Ok(email);
     }
 }

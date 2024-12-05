@@ -61,7 +61,7 @@ public class UserRegisterCommandHandler : IRequestHandler<UserRegisterCommand, E
 
         var code = await _normalUserManager.GenerateEmailConfirmationTokenAsync(user);
         
-        await _emailServiceSender.SendEmailAsync(user.Email, "Confirm your email", $"Please confirm your account by clicking this link: https://localhost:5162/Auth/ConfirmEmail?email={user.Email}&token={code}");
+        await _emailServiceSender.SendEmailAsync(user.Email, "Confirm your email", $"Please confirm your account by clicking this link: https://localhost:5001/Auth/ConfirmEmail?email={user.Email}&token={code}");
         
         return new UserRegisterCommandResponse();
     }

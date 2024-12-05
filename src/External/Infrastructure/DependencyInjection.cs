@@ -21,7 +21,7 @@ public static class DependencyInjection
         var jwtSettings = new JwtSettings();
         var oAuthGoogleSettings = new OAuthGoogleSettings();
         var emailSettings = new EmailSettings();
-        configuration.Bind(nameof(OAuthGoogleSettings), oAuthGoogleSettings);
+        configuration.Bind("OAuthSettings:Google", oAuthGoogleSettings);
         configuration.Bind(nameof(JwtSettings), jwtSettings);
         configuration.Bind(nameof(EmailSettings), emailSettings);
         services.AddSingleton(jwtSettings);
@@ -65,6 +65,7 @@ public static class DependencyInjection
                 cfg.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 cfg.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
+                cfg.DefaultSignInScheme = IdentityConstants.ExternalScheme;
             })
             .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters()
             {
@@ -75,6 +76,17 @@ public static class DependencyInjection
                 ValidIssuer = jwtSettings.Issuer,
                 ValidAudience = jwtSettings.Audience,
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key))
+            })
+            .AddCookie(IdentityConstants.ExternalScheme)
+            .AddGoogle(options =>
+            {
+                options.SignInScheme = IdentityConstants.ExternalScheme;
+                options.ClientId = oAuthGoogleSettings.ClientId;
+                options.ClientSecret = oAuthGoogleSettings.ClientSecret;
+                options.CallbackPath = oAuthGoogleSettings.RedirectUri;
+                oAuthGoogleSettings.Scopes.ForEach(options.Scope.Add);
+                options.AccessType = "offline";
+                options.SaveTokens = true;
             });
         services.AddAuthorization();
 

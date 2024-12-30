@@ -2,6 +2,6 @@
 
 public record ResetPasswordRequest(
     string Email,
-    string Token,
+    string Otp,
     string NewPassword
     );

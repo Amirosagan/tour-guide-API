@@ -1,13 +1,18 @@
 using Application;
-using Application.Interfaces;
 using Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Presentation.Seeding.identity;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddApplication()
     .AddInfrastructure(builder.Configuration);
+
+builder.Host.UseSerilog((context, loggerConfig) =>
+{
+    loggerConfig.ReadFrom.Configuration(context.Configuration);
+});
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -39,4 +44,7 @@ if(args.Length > 0 && args[0] == "seedRoles")
 
 app.UseHttpsRedirection();
 app.MapControllers();
+
+// health check
+app.MapGet("/health", () => "I'm alive");
 app.Run();

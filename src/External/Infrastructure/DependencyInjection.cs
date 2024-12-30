@@ -1,10 +1,13 @@
 using System.Text;
 using Application.Interfaces;
+using Application.Interfaces.UnitOfWork;
 using Domain.Identity;
 using Infrastructure.Data;
 using Infrastructure.EmailService;
 using Infrastructure.Google;
 using Infrastructure.JwtAuthentication;
+using Infrastructure.Otp;
+using Infrastructure.UnitOfWork;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -28,31 +31,37 @@ public static class DependencyInjection
         services.AddSingleton(oAuthGoogleSettings);
         services.AddSingleton(emailSettings);
         
+        services.AddMemoryCache();
+        
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IEmailServiceSender, EmailServiceSender>();
+        services.AddScoped<IEmailTemplateService, EmailTemplateService>();
+        services.AddScoped<IOtpGenerator, OtpGenerator>();
+
+        services.AddScoped<IUserRepository, UserRepository>();
 
         services.AddIdentityCore<NormalUser>(o =>
-        {
-            o.User.RequireUniqueEmail = true;
-            o.Password.RequireDigit = true;
-            o.Password.RequireLowercase = true;
-            o.Password.RequireUppercase = true;
-            o.Password.RequiredLength = 8;
-            o.SignIn.RequireConfirmedEmail = true;
-        })
-        .AddRoles<IdentityRole>()
+            {
+                o.User.RequireUniqueEmail = true;
+                o.Password.RequireDigit = true;
+                o.Password.RequireLowercase = true;
+                o.Password.RequireUppercase = true;
+                o.Password.RequiredLength = 8;
+                o.SignIn.RequireConfirmedEmail = true;
+            })
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
-        
+
         services.AddIdentityCore<TourGuide>(o =>
-        {
-            o.User.RequireUniqueEmail = true;
-            o.Password.RequireDigit = true;
-            o.Password.RequireLowercase = true;
-            o.Password.RequireUppercase = true;
-            o.Password.RequiredLength = 8;
-        })
-        .AddRoles<IdentityRole>()
+            {
+                o.User.RequireUniqueEmail = true;
+                o.Password.RequireDigit = true;
+                o.Password.RequireLowercase = true;
+                o.Password.RequireUppercase = true;
+                o.Password.RequiredLength = 8;
+            })
+            .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
         

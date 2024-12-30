@@ -1,8 +1,35 @@
 ﻿services:
   presentation:
     image: presentation
+    container_name: loco.API
     build:
       context: .
       dockerfile: src/External/Presentation/Dockerfile
+      args:
+        - BUILD_CONFIGURATION=Development
     ports:
         - "8080:8080"
+    healthcheck:
+        test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+        interval: 1m
+        timeout: 5s
+        retries: 3
+    secrets:
+      - app_settings
+      - source: app_settings
+        target: /app/src/External/Presentation/appsettings.json
+  loco.seq:
+    image: datalust/seq:latest
+    depends_on: 
+        - presentation
+    container_name: loco.seq
+    volumes:
+      - ./seq:/data
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - "8081:80"
+      - "5341:5341"
+secrets:
+  app_settings:
+    file: ./src/External/Presentation/appsettings.json

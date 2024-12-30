@@ -112,6 +112,12 @@ public class AuthController : Controller
         var email = authenticateResult.Principal.FindFirstValue(ClaimTypes.Email);
         var name = authenticateResult.Principal.FindFirstValue(ClaimTypes.Name);
         var picture = authenticateResult.Principal.FindFirstValue("picture");
+        authenticateResult.Principal.Claims.ToList().ForEach(c => Console.WriteLine(c.Type + " " + c.Value));
+        authenticateResult.Principal.Identities.ToList().ForEach(i => Console.WriteLine(i.Name));
+        authenticateResult.Properties.Items.ToList().ForEach(i => Console.WriteLine(i.Key + " " + i.Value));
+        Console.WriteLine(authenticateResult.Properties.GetTokenValue("refresh_token"));
+        Console.WriteLine(authenticateResult.Properties.GetTokenValue("refresh_token"));
+        
 
         return Ok(email);
     }

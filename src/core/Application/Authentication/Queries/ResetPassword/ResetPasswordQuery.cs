@@ -5,6 +5,6 @@ namespace Application.Authentication.Queries.ResetPassword;
 
 public record ResetPasswordQuery(
     string Email,
-    string Token,
+    string Otp,
     string NewPassword
     ) : IRequest<ErrorOr<ResetPasswordQueryResponse>>;

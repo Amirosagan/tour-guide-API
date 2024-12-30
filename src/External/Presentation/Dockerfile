@@ -5,7 +5,7 @@ EXPOSE 8080
 EXPOSE 8081
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-ARG BUILD_CONFIGURATION=Development
+ARG BUILD_CONFIGURATION
 WORKDIR /src
 COPY ["src/External/Presentation/Presentation.csproj", "src/External/Presentation/"]
 RUN dotnet restore "src/External/Presentation/Presentation.csproj"

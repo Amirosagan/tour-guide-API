@@ -1,0 +1,82 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to LOCO</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+        }
+        .email-container {
+            background-color: #ffffff;
+            margin: 20px auto;
+            padding: 20px;
+            max-width: 600px;
+            border: 1px solid #dddddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 15px 10px;
+            border-radius: 8px 8px 0 0;
+        }
+        .content {
+            padding: 20px;
+            text-align: left;
+            line-height: 1.6;
+            color: #333333;
+        }
+        .otp {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            color: #4CAF50;
+            margin: 20px 0;
+        }
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #777777;
+            padding: 10px;
+            border-top: 1px solid #dddddd;
+        }
+        .btn {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="email-container">
+    <div class="header">
+        <h1>Welcome to LOCO!</h1>
+    </div>
+    <div class="content">
+        <p>Dear {{CustomerName}},</p>
+        <p>Thank you for joining LOCO! We're excited to have you onboard. Please verify your email address to get started with your account.</p>
+        <p>Here is your One-Time Password (OTP) for email verification:</p>
+        <div class="otp">{{OTP}}</div>
+        <p>This OTP is valid for the next <strong>10 minutes</strong>. Please do not share it with anyone.</p>
+        <p>If you have any questions or need assistance, feel free to contact our support team.</p>
+        <p>Best regards,</p>
+        <p>The LOCO Team</p>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 LOCO. All rights reserved.</p>
+        <p><a href="https://loco.com" class="btn">Visit LOCO</a></p>
+    </div>
+</div>
+</body>
+</html>

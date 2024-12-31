@@ -33,8 +33,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Content Include="../../core/Domain/Email/Templates\*.html">
+        <Content Include=".\Templates\**\*.html">
             <CopyToPublishDirectory>Always</CopyToPublishDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
     </ItemGroup>
 

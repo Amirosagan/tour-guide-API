@@ -4,7 +4,21 @@ using Microsoft.AspNetCore.Identity;
 using Presentation.Seeding.identity;
 using Serilog;
 
+var cors = "LocalOnly";
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: cors,
+        corsPolicyBuilder =>
+        {
+            corsPolicyBuilder.WithOrigins("http://localhost:5173", "https://localhost:5173")
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials();
+        });
+});
 
 builder.Services.AddApplication()
     .AddInfrastructure(builder.Configuration);
@@ -26,6 +40,8 @@ builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+app.UseCors(cors);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

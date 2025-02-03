@@ -1,13 +1,18 @@
 using System.Text;
+
 using Application.Interfaces;
 using Application.Interfaces.UnitOfWork;
+
 using Domain.Identity;
+
 using Infrastructure.Data;
 using Infrastructure.EmailService;
 using Infrastructure.Google;
 using Infrastructure.JwtAuthentication;
 using Infrastructure.Otp;
+using Infrastructure.Storage;
 using Infrastructure.UnitOfWork;
+
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -27,18 +32,23 @@ public static class DependencyInjection
         var jwtSettings = new JwtSettings();
         var oAuthGoogleSettings = new OAuthGoogleSettings();
         var emailSettings = new EmailSettings();
+        var dropboxSettings = new DropboxSettings();
+            
         configuration.Bind("OAuthSettings:Google", oAuthGoogleSettings);
         configuration.Bind(nameof(JwtSettings), jwtSettings);
         configuration.Bind(nameof(EmailSettings), emailSettings);
+        configuration.Bind(nameof(DropboxSettings), dropboxSettings);
         services.AddSingleton(jwtSettings);
         services.AddSingleton(oAuthGoogleSettings);
         services.AddSingleton(emailSettings);
+        services.AddSingleton(dropboxSettings);
 
         services.AddMemoryCache();
 
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IEmailServiceSender, EmailServiceSender>();
         services.AddScoped<IEmailTemplateService, EmailTemplateService>();
+        services.AddScoped<IStorageService, StorageService>();
         services.AddScoped<IOtpGenerator, OtpGenerator>();
 
         services.AddScoped<IUserRepository, UserRepository>();

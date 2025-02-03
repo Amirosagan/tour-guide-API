@@ -1,5 +1,3 @@
 namespace Domain.Identity;
 
-public class NormalUser : User
-{
-}
+public class NormalUser : User { }

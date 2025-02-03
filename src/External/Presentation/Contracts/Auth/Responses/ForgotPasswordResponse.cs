@@ -1,5 +1,3 @@
 ﻿namespace Presentation.Contracts.Auth.Responses;
 
-public record ForgotPasswordResponse(
-    string Message
-    );
+public record ForgotPasswordResponse(string Message);

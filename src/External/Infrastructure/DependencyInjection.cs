@@ -19,7 +19,10 @@ namespace Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddInfrastructure(
+        this IServiceCollection services,
+        IConfiguration configuration
+    )
     {
         var jwtSettings = new JwtSettings();
         var oAuthGoogleSettings = new OAuthGoogleSettings();
@@ -30,9 +33,9 @@ public static class DependencyInjection
         services.AddSingleton(jwtSettings);
         services.AddSingleton(oAuthGoogleSettings);
         services.AddSingleton(emailSettings);
-        
+
         services.AddMemoryCache();
-        
+
         services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
         services.AddScoped<IEmailServiceSender, EmailServiceSender>();
         services.AddScoped<IEmailTemplateService, EmailTemplateService>();
@@ -40,7 +43,8 @@ public static class DependencyInjection
 
         services.AddScoped<IUserRepository, UserRepository>();
 
-        services.AddIdentityCore<NormalUser>(o =>
+        services
+            .AddIdentityCore<NormalUser>(o =>
             {
                 o.User.RequireUniqueEmail = true;
                 o.Password.RequireDigit = true;
@@ -53,7 +57,8 @@ public static class DependencyInjection
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
 
-        services.AddIdentityCore<TourGuide>(o =>
+        services
+            .AddIdentityCore<TourGuide>(o =>
             {
                 o.User.RequireUniqueEmail = true;
                 o.Password.RequireDigit = true;
@@ -64,28 +69,34 @@ public static class DependencyInjection
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
             .AddDefaultTokenProviders();
-        
+
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddDbContext<ApplicationDbContext>(options =>
-            options.UseSqlServer(connectionString));
+            options.UseSqlServer(connectionString)
+        );
 
-        services.AddAuthentication(cfg =>
+        services
+            .AddAuthentication(cfg =>
             {
                 cfg.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 cfg.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
 
                 cfg.DefaultSignInScheme = IdentityConstants.ExternalScheme;
             })
-            .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters()
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtSettings.Issuer,
-                ValidAudience = jwtSettings.Audience,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key))
-            })
+            .AddJwtBearer(options =>
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings.Issuer,
+                    ValidAudience = jwtSettings.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(jwtSettings.Key)
+                    ),
+                }
+            )
             .AddCookie(IdentityConstants.ExternalScheme)
             .AddGoogle(options =>
             {

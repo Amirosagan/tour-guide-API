@@ -20,15 +20,20 @@ public class OtpGenerator : IOtpGenerator
         int otp = new Random().Next(100000, 999999);
         using (var sha256 = SHA256.Create())
         {
-            string otpHashed = Convert.ToBase64String(sha256.ComputeHash(Encoding.UTF8.GetBytes(otp.ToString())));
+            string otpHashed = Convert.ToBase64String(
+                sha256.ComputeHash(Encoding.UTF8.GetBytes(otp.ToString()))
+            );
             StoreOtp(otpHashed, token);
         }
         return otp.ToString();
     }
+
     public string VerifyOtp(string otp)
     {
         using var sha256 = SHA256.Create();
-        string otpHashed = Convert.ToBase64String(sha256.ComputeHash(Encoding.UTF8.GetBytes(otp.ToString())));
+        string otpHashed = Convert.ToBase64String(
+            sha256.ComputeHash(Encoding.UTF8.GetBytes(otp.ToString()))
+        );
         if (_memoryCache.TryGetValue(otpHashed, out string? token))
         {
             _memoryCache.Remove(otpHashed);
@@ -41,11 +46,12 @@ public class OtpGenerator : IOtpGenerator
         }
         return "";
     }
-    private void StoreOtp( string otp, string token, int expirationInMinutes = 5)
+
+    private void StoreOtp(string otp, string token, int expirationInMinutes = 5)
     {
         var cacheEntryOptions = new MemoryCacheEntryOptions
         {
-            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(expirationInMinutes)
+            AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(expirationInMinutes),
         };
         _memoryCache.Set(otp, token, cacheEntryOptions);
     }

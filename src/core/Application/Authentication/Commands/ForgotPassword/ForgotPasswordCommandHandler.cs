@@ -9,7 +9,8 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Authentication.Commands.ForgotPassword;
 
-public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordCommand, ErrorOr<ForgotPasswordCommandResponse>>
+public class ForgotPasswordCommandHandler
+    : IRequestHandler<ForgotPasswordCommand, ErrorOr<ForgotPasswordCommandResponse>>
 {
     private readonly UserManager<NormalUser> _normalUserManager;
     private readonly UserManager<TourGuide> _tourGuideManager;
@@ -18,7 +19,14 @@ public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordComman
     private readonly ILogger<ForgotPasswordCommandHandler> _logger;
     private readonly IOtpGenerator _otpGenerator;
 
-    public ForgotPasswordCommandHandler(UserManager<NormalUser> normalUserManager, UserManager<TourGuide> tourGuideManager, IEmailServiceSender emailServiceSender, ILogger<ForgotPasswordCommandHandler> logger, IEmailTemplateService emailTemplateService, IOtpGenerator otpGenerator)
+    public ForgotPasswordCommandHandler(
+        UserManager<NormalUser> normalUserManager,
+        UserManager<TourGuide> tourGuideManager,
+        IEmailServiceSender emailServiceSender,
+        ILogger<ForgotPasswordCommandHandler> logger,
+        IEmailTemplateService emailTemplateService,
+        IOtpGenerator otpGenerator
+    )
     {
         _normalUserManager = normalUserManager;
         _tourGuideManager = tourGuideManager;
@@ -28,11 +36,14 @@ public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordComman
         _otpGenerator = otpGenerator;
     }
 
-    public async Task<ErrorOr<ForgotPasswordCommandResponse>> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<ForgotPasswordCommandResponse>> Handle(
+        ForgotPasswordCommand request,
+        CancellationToken cancellationToken
+    )
     {
         _logger.LogInformation("Forgot password for user with email {Email}", request.Email);
         var user = await _normalUserManager.FindByEmailAsync(request.Email);
-        const string  subject = "Reset your password";
+        const string subject = "Reset your password";
         if (user != null)
         {
             if (!user.EmailConfirmed)
@@ -46,15 +57,15 @@ public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordComman
             var placeholders = new Dictionary<String, String>()
             {
                 { EmailPlaceHolders.ForgotPasswordPlaceholders.Otp, otp },
-                { EmailPlaceHolders.ForgotPasswordPlaceholders.CustomerName, user.FullName }
+                { EmailPlaceHolders.ForgotPasswordPlaceholders.CustomerName, user.FullName },
             };
             var body = _emailTemplateService.LoadTemplate("ForgotPasswordOtpEmail", placeholders);
             await _emailServiceSender.SendEmailAsync(request.Email, subject, body);
-            
+
             return new ForgotPasswordCommandResponse();
         }
         var tourGuide = await _tourGuideManager.FindByEmailAsync(request.Email);
-        if(tourGuide != null)
+        if (tourGuide != null)
         {
             if (!tourGuide.EmailConfirmed)
             {
@@ -67,13 +78,13 @@ public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordComman
             var placeholders = new Dictionary<String, String>()
             {
                 { EmailPlaceHolders.ForgotPasswordPlaceholders.Otp, otp },
-                { EmailPlaceHolders.ForgotPasswordPlaceholders.CustomerName, user.FullName }
+                { EmailPlaceHolders.ForgotPasswordPlaceholders.CustomerName, user.FullName },
             };
             var body = _emailTemplateService.LoadTemplate("ForgotPasswordOtpEmail", placeholders);
             await _emailServiceSender.SendEmailAsync(request.Email, subject, body);
             return new ForgotPasswordCommandResponse();
         }
-        
+
         _logger.LogWarning("User with email {Email} not found", request.Email);
         return DomainErrors.TokenConfirmation.EmailNotFound();
     }

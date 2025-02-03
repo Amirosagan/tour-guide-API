@@ -22,13 +22,13 @@ public class AuthController : Controller
 {
     private readonly ISender _mediator;
     private readonly IMapper _mapper;
-    
+
     public AuthController(ISender mediator, IMapper mapper)
     {
         _mediator = mediator;
         _mapper = mapper;
     }
-    
+
     [HttpPost("Register")]
     public async Task<IActionResult> Register([FromBody] AuthenticationSignupRequest request)
     {
@@ -39,7 +39,7 @@ public class AuthController : Controller
             BadRequest
         );
     }
-    
+
     [HttpGet("Login")]
     public async Task<IActionResult> Login([FromQuery] AuthenticationLoginRequest request)
     {
@@ -52,7 +52,9 @@ public class AuthController : Controller
     }
 
     [HttpPost("NewEmailConfirmLink")]
-    public async Task<IActionResult> NewEmailConfirmLink([FromBody] NewEmailConfirmLinkRequest request)
+    public async Task<IActionResult> NewEmailConfirmLink(
+        [FromBody] NewEmailConfirmLinkRequest request
+    )
     {
         var command = _mapper.Map<GenerateNewConfirmTokenCommand>(request);
         var result = await _mediator.Send(command);
@@ -61,7 +63,7 @@ public class AuthController : Controller
             BadRequest
         );
     }
-    
+
     [HttpGet("ConfirmEmail")]
     public async Task<IActionResult> ConfirmEmail([FromQuery] ConfirmEmailRequest request)
     {
@@ -71,8 +73,8 @@ public class AuthController : Controller
             success => Ok(_mapper.Map<ConfirmEmailResponse>(success)),
             BadRequest
         );
-    } 
-    
+    }
+
     [HttpPost("ForgotPassword")]
     public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordRequest request)
     {
@@ -83,7 +85,7 @@ public class AuthController : Controller
             BadRequest
         );
     }
-    
+
     [HttpGet("ResetPassword")]
     public async Task<IActionResult> ResetPassword([FromQuery] ResetPasswordRequest request)
     {
@@ -94,7 +96,7 @@ public class AuthController : Controller
             BadRequest
         );
     }
-    
+
     [HttpGet("google-login")]
     public IActionResult GoogleLogin()
     {
@@ -102,22 +104,27 @@ public class AuthController : Controller
         var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
         return Challenge(properties, GoogleDefaults.AuthenticationScheme);
     }
-    
+
     [HttpGet("google-signin")]
     public async Task<IActionResult> GoogleSignin()
     {
-        var authenticateResult = await HttpContext.AuthenticateAsync(IdentityConstants.ExternalScheme);
+        var authenticateResult = await HttpContext.AuthenticateAsync(
+            IdentityConstants.ExternalScheme
+        );
         if (!authenticateResult.Succeeded || authenticateResult.Principal == null)
             return Unauthorized();
         var email = authenticateResult.Principal.FindFirstValue(ClaimTypes.Email);
         var name = authenticateResult.Principal.FindFirstValue(ClaimTypes.Name);
         var picture = authenticateResult.Principal.FindFirstValue("picture");
-        authenticateResult.Principal.Claims.ToList().ForEach(c => Console.WriteLine(c.Type + " " + c.Value));
+        authenticateResult
+            .Principal.Claims.ToList()
+            .ForEach(c => Console.WriteLine(c.Type + " " + c.Value));
         authenticateResult.Principal.Identities.ToList().ForEach(i => Console.WriteLine(i.Name));
-        authenticateResult.Properties.Items.ToList().ForEach(i => Console.WriteLine(i.Key + " " + i.Value));
+        authenticateResult
+            .Properties.Items.ToList()
+            .ForEach(i => Console.WriteLine(i.Key + " " + i.Value));
         Console.WriteLine(authenticateResult.Properties.GetTokenValue("refresh_token"));
         Console.WriteLine(authenticateResult.Properties.GetTokenValue("refresh_token"));
-        
 
         return Ok(email);
     }

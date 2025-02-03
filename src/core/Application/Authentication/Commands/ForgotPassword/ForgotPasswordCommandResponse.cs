@@ -2,4 +2,4 @@
 
 public record ForgotPasswordCommandResponse(
     string Message = "Please check your email to reset your password."
-    );
+);

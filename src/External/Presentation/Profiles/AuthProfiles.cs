@@ -21,7 +21,7 @@ public class AuthProfiles : Profile
         CreateMap<ConfirmEmailRequest, ConfirmEmailCommand>();
         CreateMap<ForgotPasswordRequest, ForgotPasswordCommand>();
         CreateMap<ResetPasswordRequest, ResetPasswordQuery>();
-        
+
         CreateMap<UserRegisterCommandResponse, AuthenticationSignupResponse>();
         CreateMap<AuthenticationResponse, AuthenticationLoginResponse>();
         CreateMap<GenerateNewConfirmTokenCommandResponse, NewEmailConfirmLinkResponse>();

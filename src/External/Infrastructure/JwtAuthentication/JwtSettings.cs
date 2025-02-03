@@ -11,12 +11,12 @@ public class JwtSettings
         var key = Environment.GetEnvironmentVariable("JWT_KEY") ?? string.Empty;
         var issuer = Environment.GetEnvironmentVariable("JWT_ISSUER") ?? string.Empty;
         var audience = Environment.GetEnvironmentVariable("JWT_AUDIENCE") ?? string.Empty;
-        
+
         return new JwtSettings
         {
             Key = key,
             Issuer = issuer,
-            Audience = audience
+            Audience = audience,
         };
     }
 }

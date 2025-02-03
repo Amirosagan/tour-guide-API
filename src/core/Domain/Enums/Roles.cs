@@ -4,5 +4,5 @@ public enum Roles
 {
     Admin,
     TourGuide,
-    NormalUser
+    NormalUser,
 }

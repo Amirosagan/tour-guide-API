@@ -11,4 +11,4 @@ public record UserRegisterCommand(
     string LastName,
     string PhoneNumber,
     string? ProfilePictureUrl
-    ) : IRequest<ErrorOr<UserRegisterCommandResponse>>;
+) : IRequest<ErrorOr<UserRegisterCommandResponse>>;

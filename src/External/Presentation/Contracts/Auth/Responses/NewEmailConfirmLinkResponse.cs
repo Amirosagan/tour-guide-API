@@ -1,5 +1,3 @@
 ﻿namespace Presentation.Contracts.Auth.Responses;
 
-public record NewEmailConfirmLinkResponse(
-    string Message
-    );
+public record NewEmailConfirmLinkResponse(string Message);

@@ -10,31 +10,41 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: cors,
+    options.AddPolicy(
+        name: cors,
         corsPolicyBuilder =>
         {
-            corsPolicyBuilder.WithOrigins("http://localhost:5173", "https://localhost:5173")
+            corsPolicyBuilder
+                .WithOrigins("http://localhost:5173", "https://localhost:5173")
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials();
-        });
+        }
+    );
 });
 
-builder.Services.AddApplication()
-    .AddInfrastructure(builder.Configuration);
+builder.Services.AddApplication().AddInfrastructure(builder.Configuration);
 
-builder.Host.UseSerilog((context, loggerConfig) =>
-{
-    loggerConfig.ReadFrom.Configuration(context.Configuration);
-});
+builder.Host.UseSerilog(
+    (context, loggerConfig) =>
+    {
+        loggerConfig.ReadFrom.Configuration(context.Configuration);
+    }
+);
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddControllers().AddJsonOptions(o =>
+builder
+    .Services.AddControllers()
+    .AddJsonOptions(o =>
     {
-        o.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
-    }
-);
+        o.JsonSerializerOptions.ReferenceHandler = System
+            .Text
+            .Json
+            .Serialization
+            .ReferenceHandler
+            .IgnoreCycles;
+    });
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
@@ -51,7 +61,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-if(args.Length > 0 && args[0] == "seedRoles")
+if (args.Length > 0 && args[0] == "seedRoles")
 {
     var scope = app.Services.CreateScope();
     using var context = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();

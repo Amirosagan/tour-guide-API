@@ -1,5 +1,3 @@
 namespace Presentation.Contracts.Auth.Responses;
 
-public record AuthenticationSignupResponse(
-    string Message
-    );
+public record AuthenticationSignupResponse(string Message);

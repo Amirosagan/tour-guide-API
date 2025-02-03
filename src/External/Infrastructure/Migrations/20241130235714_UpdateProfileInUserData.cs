@@ -14,15 +14,14 @@ namespace Infrastructure.Migrations
                 name: "ProfilePictureUrl",
                 table: "AspNetUsers",
                 type: "nvarchar(max)",
-                nullable: true);
+                nullable: true
+            );
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "ProfilePictureUrl",
-                table: "AspNetUsers");
+            migrationBuilder.DropColumn(name: "ProfilePictureUrl", table: "AspNetUsers");
         }
     }
 }

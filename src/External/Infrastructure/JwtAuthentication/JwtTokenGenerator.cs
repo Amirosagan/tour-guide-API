@@ -9,7 +9,7 @@ namespace Infrastructure.JwtAuthentication;
 
 public class JwtTokenGenerator(JwtSettings jwtSettings) : IJwtTokenGenerator
 {
-    public string GenerateToken(User user , string role, bool longExpires = false)
+    public string GenerateToken(User user, string role, bool longExpires = false)
     {
         var expireTimeHoure = 24;
         if (longExpires)
@@ -17,10 +17,9 @@ public class JwtTokenGenerator(JwtSettings jwtSettings) : IJwtTokenGenerator
             expireTimeHoure = 24 * 30;
         }
         var signingCredentials = new SigningCredentials(
-            new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(jwtSettings.Key)
-            ),
-            SecurityAlgorithms.HmacSha256);
+            new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
+            SecurityAlgorithms.HmacSha256
+        );
 
         var claims = new[]
         {
@@ -40,5 +39,5 @@ public class JwtTokenGenerator(JwtSettings jwtSettings) : IJwtTokenGenerator
         );
 
         return new JwtSecurityTokenHandler().WriteToken(token);
-    } 
+    }
 }

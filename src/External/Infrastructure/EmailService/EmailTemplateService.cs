@@ -5,12 +5,13 @@ namespace Infrastructure.EmailService;
 public class EmailTemplateService : IEmailTemplateService
 {
     private readonly string _templatePath;
-/// <summary>
-/// Initializes a new instance of the <see cref="EmailTemplateService"/> class.
-/// Sets the template path for loading email templates. If HTML files are present
-/// in the current directory, it uses the current directory as the template path.
-/// Otherwise, it defaults to a specified path relative to the current directory.
-/// </summary>
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="EmailTemplateService"/> class.
+    /// Sets the template path for loading email templates. If HTML files are present
+    /// in the current directory, it uses the current directory as the template path.
+    /// Otherwise, it defaults to a specified path relative to the current directory.
+    /// </summary>
     public EmailTemplateService()
     {
         if (Directory.GetFiles(Directory.GetCurrentDirectory(), "*.html").Length > 0)
@@ -22,6 +23,7 @@ public class EmailTemplateService : IEmailTemplateService
             _templatePath = Path.Combine(Directory.GetCurrentDirectory() + "/Templates");
         }
     }
+
     /// <summary>
     /// Loads the specified template from the template path and replaces
     /// placeholders in the template with the given replacement values.

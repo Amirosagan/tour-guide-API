@@ -1,5 +1,3 @@
 namespace Domain.Identity;
 
-public class TourGuide : User
-{
-}
+public class TourGuide : User { }

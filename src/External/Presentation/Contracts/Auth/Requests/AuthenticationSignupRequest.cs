@@ -7,4 +7,4 @@ public record AuthenticationSignupRequest(
     string LastName,
     string PhoneNumber,
     string? ProfilePictureUrl
-    );
+);

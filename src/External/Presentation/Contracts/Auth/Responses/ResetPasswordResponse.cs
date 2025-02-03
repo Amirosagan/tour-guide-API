@@ -1,5 +1,3 @@
 ﻿namespace Presentation.Contracts.Auth.Responses;
 
-public record ResetPasswordResponse(
-    string Message
-    );
+public record ResetPasswordResponse(string Message);

@@ -1,5 +1,4 @@
 ﻿using Application.Interfaces;
-
 using Microsoft.AspNetCore.Mvc;
 
 namespace Presentation.Controllers;
@@ -10,7 +9,7 @@ public class UploadController(IStorageService storageService) : Controller
     private readonly IStorageService _storageService = storageService;
 
     [HttpPost]
-    [RequestSizeLimit(5*1024*1024)]
+    [RequestSizeLimit(5 * 1024 * 1024)]
     public async Task<IActionResult> Index(IFormFile file)
     {
         await using var stream = file.OpenReadStream();

@@ -1,5 +1,3 @@
 ﻿namespace Presentation.Contracts.Upload;
 
-public record UploadResponse(
-    string Url
-    );
+public record UploadResponse(string Url);

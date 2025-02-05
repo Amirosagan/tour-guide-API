@@ -12,7 +12,11 @@ public class StorageService : IStorageService
     public StorageService(DropboxSettings dropboxSettings)
     {
         _dropboxSettings = dropboxSettings;
-        _dropboxClient = new DropboxClient(_dropboxSettings.Key);
+        _dropboxClient = new DropboxClient(
+            _dropboxSettings.Key,
+            _dropboxSettings.AppKey,
+            _dropboxSettings.AppSecret
+        );
     }
 
     public async Task<string> UploadAsync(string name, Stream stream)

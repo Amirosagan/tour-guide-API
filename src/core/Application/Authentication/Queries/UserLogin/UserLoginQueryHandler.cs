@@ -39,9 +39,11 @@ public class UserLoginQueryHandler(
                 return DomainErrors.UserLogin.InvalidCredentials();
             }
 
-            var jwtToken = jwtTokenGenerator.GenerateToken(normalUser, Roles.NormalUser.ToString());
+            var roles = await normalUserManger.GetRolesAsync(normalUser);
+
+            var jwtToken = jwtTokenGenerator.GenerateToken(normalUser, roles[0]);
             logger.LogInformation("User with email {Email} logged in", request.Email);
-            return new AuthenticationResponse(jwtToken, normalUser.Id, Roles.NormalUser.ToString());
+            return new AuthenticationResponse(jwtToken, normalUser.Id, roles[0]);
         }
         var tourGuidUser = await tourGuideManager.FindByEmailAsync(request.Email);
         if (tourGuidUser != null)

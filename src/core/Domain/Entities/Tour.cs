@@ -17,7 +17,6 @@ public class Tour
     public required string Location { get; set; }
     public string GoogleMapsLocation =>
         $"https://www.google.com/maps/search/?api=1&query={Uri.EscapeDataString(Location)}";
-    public required uint CurrentCapacity { get; set; } = 0;
     public required uint MaxCapacity { get; set; }
     public List<string> Images { get; set; } = new List<string>();
     public List<Review> Reviews { get; set; } = new List<Review>();

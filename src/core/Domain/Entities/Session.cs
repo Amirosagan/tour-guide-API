@@ -11,7 +11,7 @@ public class Session
     [Required]
     public Tour Tour { get; set; } = null!;
     public int CurrentCapacity { get; set; } = 0;
-    public required int MaxCapacity { get; set; }
+    public required uint MaxCapacity { get; set; }
     public required DateTime StartDate { get; set; }
     public required DateTime EndDate { get; set; }
 }

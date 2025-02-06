@@ -48,6 +48,10 @@ public static class DependencyInjection
         services.AddScoped<IOtpGenerator, OtpGenerator>();
 
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<ITourRepository, TourRepository>();
+        services.AddScoped<ITourCategoryRepository, TourCategoryRepository>();
+        services.AddScoped<ISessionRepository, SessionRepository>();
+        services.AddScoped<IUnitOfWorkRepo, UnitOfWorkRepo>();
 
         services
             .AddIdentityCore<NormalUser>(o =>

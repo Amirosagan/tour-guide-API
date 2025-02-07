@@ -10,9 +10,7 @@ namespace Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "CurrentCapacity",
-                table: "Tours");
+            migrationBuilder.DropColumn(name: "CurrentCapacity", table: "Tours");
 
             migrationBuilder.AlterColumn<long>(
                 name: "MaxCapacity",
@@ -20,7 +18,8 @@ namespace Infrastructure.Migrations
                 type: "bigint",
                 nullable: false,
                 oldClrType: typeof(int),
-                oldType: "int");
+                oldType: "int"
+            );
         }
 
         /// <inheritdoc />
@@ -31,7 +30,8 @@ namespace Infrastructure.Migrations
                 table: "Tours",
                 type: "bigint",
                 nullable: false,
-                defaultValue: 0L);
+                defaultValue: 0L
+            );
 
             migrationBuilder.AlterColumn<int>(
                 name: "MaxCapacity",
@@ -39,7 +39,8 @@ namespace Infrastructure.Migrations
                 type: "int",
                 nullable: false,
                 oldClrType: typeof(long),
-                oldType: "bigint");
+                oldType: "bigint"
+            );
         }
     }
 }

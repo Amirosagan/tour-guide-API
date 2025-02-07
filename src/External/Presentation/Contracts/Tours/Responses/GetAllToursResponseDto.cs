@@ -10,4 +10,4 @@ public record GetAllToursResponseDto(
     bool HasNext,
     bool HasPrevious,
     IEnumerable<TourInListDto> Tours
-    );
+);

@@ -45,7 +45,7 @@ public class CreateTourCommandHandler
         };
 
         _logger.LogInformation("Creating Session for Tour with Id {Id}", tour.Id);
-        
+
         var sessions = new List<Session>();
 
         foreach (var session in request.Sessions)
@@ -67,7 +67,7 @@ public class CreateTourCommandHandler
 
         foreach (var tourCategory in request.TourCategoryIds)
         {
-            var category = await _tourCategoryRepository.GetAsync(tourCategory);
+            var category = await _tourCategoryRepository.GetAsyncWithTracking(tourCategory);
 
             if (category is null)
             {

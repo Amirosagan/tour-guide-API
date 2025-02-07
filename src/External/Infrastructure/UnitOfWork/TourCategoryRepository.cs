@@ -24,6 +24,11 @@ public class TourCategoryRepository : ITourCategoryRepository
         return _context.TourCategories.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
     }
 
+    public Task<TourCategory?> GetAsyncWithTracking(int id)
+    {
+        return _context.TourCategories.FirstOrDefaultAsync(x => x.Id == id);
+    }
+
     public void Add(TourCategory tourCategory)
     {
         _context.TourCategories.Add(tourCategory);

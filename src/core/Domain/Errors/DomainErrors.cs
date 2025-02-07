@@ -41,4 +41,10 @@ public static class DomainErrors
 
         public static Error EmailNotFound() => Error.NotFound(description: "Email not found.");
     }
+
+    public static class TourCategory
+    {
+        public static Error TourCategoryNotFound() =>
+            Error.NotFound(description: "Tour category not found.");
+    }
 }

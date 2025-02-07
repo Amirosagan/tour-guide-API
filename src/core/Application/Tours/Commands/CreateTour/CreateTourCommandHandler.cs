@@ -11,21 +11,18 @@ public class CreateTourCommandHandler
 {
     private readonly ITourRepository _tourRepository;
     private readonly IUnitOfWorkRepo _unitOfWorkRepo;
-    private readonly ISessionRepository _sessionRepository;
     private readonly ITourCategoryRepository _tourCategoryRepository;
     private readonly ILogger<CreateTourCommandHandler> _logger;
 
     public CreateTourCommandHandler(
         ITourRepository tourRepository,
         ILogger<CreateTourCommandHandler> logger,
-        ISessionRepository sessionRepository,
         IUnitOfWorkRepo unitOfWorkRepo,
         ITourCategoryRepository tourCategoryRepository
     )
     {
         _tourRepository = tourRepository;
         _logger = logger;
-        _sessionRepository = sessionRepository;
         _unitOfWorkRepo = unitOfWorkRepo;
         _tourCategoryRepository = tourCategoryRepository;
     }
@@ -48,6 +45,8 @@ public class CreateTourCommandHandler
         };
 
         _logger.LogInformation("Creating Session for Tour with Id {Id}", tour.Id);
+        
+        var sessions = new List<Session>();
 
         foreach (var session in request.Sessions)
         {
@@ -59,7 +58,7 @@ public class CreateTourCommandHandler
                 MaxCapacity = request.MaxCapacity,
             };
 
-            _sessionRepository.Add(newSession);
+            sessions.Add(newSession);
         }
 
         _logger.LogInformation("Adding Tour Category with Id {Id}", tour.Id);
@@ -80,6 +79,8 @@ public class CreateTourCommandHandler
         }
 
         tour.Categories = tourCategories;
+
+        tour.Sessions = sessions;
 
         _logger.LogInformation("Saving changes to database");
 

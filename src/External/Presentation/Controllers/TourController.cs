@@ -1,4 +1,6 @@
 using Application.Tours.Commands.CreateTour;
+using Application.Tours.Queries.GetAllTours;
+
 using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -27,6 +29,18 @@ public class TourController : Controller
         var result = await _mediator.Send(command);
         return result.Match<IActionResult>(
             success => Ok(_mapper.Map<CreateTourResponseDto>(success)),
+            BadRequest
+        );
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll([FromQuery] GetAllToursRequestDto request)
+    {
+        var query = _mapper.Map<GetAllToursQuery>(request);
+        
+        var result = await _mediator.Send(query);
+        return result.Match<IActionResult>(
+            success => Ok(_mapper.Map<GetAllToursResponseDto>(success)),
             BadRequest
         );
     }

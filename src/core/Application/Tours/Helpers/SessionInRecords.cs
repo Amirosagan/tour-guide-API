@@ -1,3 +1,3 @@
 namespace Application.Tours.Helpers;
 
-public record SessionInRecords(DateTime StartDate, DateTime EndDate);
+public record SessionInRecords(DateOnly StartDate, DateOnly EndDate);

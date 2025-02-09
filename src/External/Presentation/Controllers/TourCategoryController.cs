@@ -1,6 +1,9 @@
 ﻿using Application.TourCategories.Commands.CreateTourCategory;
 using Application.TourCategories.Commands.RemoveTourCategory;
 using AutoMapper;
+
+using Domain.Enums;
+
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -21,7 +24,15 @@ public class TourCategoryController : Controller
         _mediator = mediator;
     }
 
+    /// <summary>
+    /// Creates a new tour category.
+    /// </summary>
+    /// <param name="request">The request.</param>
+    /// <returns>The newly created tour category.</returns>
+    /// <response code="200">The newly created tour category.</response>
+    /// <response code="400">The request was invalid.</response>
     [HttpPost]
+    [Authorize(Roles = nameof(Roles.Admin))]
     public async Task<IActionResult> Create([FromBody] CreateTourCategoryDto request)
     {
         var command = _mapper.Map<CreateTourCategoryCommand>(request);
@@ -33,7 +44,15 @@ public class TourCategoryController : Controller
         );
     }
 
+/// <summary>
+/// Removes a tour category.
+/// </summary>
+/// <param name="request">The request containing the ID of the tour category to be removed.</param>
+/// <returns>Returns Ok if the tour category is successfully removed, otherwise returns BadRequest.</returns>
+/// <response code="200">The tour category was successfully removed.</response>
+/// <response code="400">The request was invalid or the tour category was not found.</response>
     [HttpDelete]
+    [Authorize(Roles = nameof(Roles.Admin))]
     public async Task<IActionResult> Remove([FromQuery] RemoveTourCategoryDto request)
     {
         var command = _mapper.Map<RemoveTourCategoryCommand>(request);

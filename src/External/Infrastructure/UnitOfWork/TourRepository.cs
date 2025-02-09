@@ -29,9 +29,9 @@ public class TourRepository : ITourRepository
         return _context.Tours.AsNoTracking();
     }
 
-    public Task<Tour?> GetAsync(Guid id)
+    public Task<Tour?> GetAsyncIncludeSessionsAndCategories(Guid id)
     {
-        return _context.Tours.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+        return _context.Tours.AsNoTracking().Include(t=>t.Sessions).Include(t=>t.Categories).FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public void Update(Tour tour)

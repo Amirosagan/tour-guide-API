@@ -31,7 +31,11 @@ public class TourRepository : ITourRepository
 
     public Task<Tour?> GetAsyncIncludeSessionsAndCategories(Guid id)
     {
-        return _context.Tours.AsNoTracking().Include(t=>t.Sessions).Include(t=>t.Categories).FirstOrDefaultAsync(x => x.Id == id);
+        return _context
+            .Tours.AsNoTracking()
+            .Include(t => t.Sessions)
+            .Include(t => t.Categories)
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public void Update(Tour tour)

@@ -1,11 +1,8 @@
 using Application.Tours.Commands.CreateTour;
 using Application.Tours.Queries.GetAllTours;
 using Application.Tours.Queries.GetTour;
-
 using AutoMapper;
-
 using Domain.Enums;
-
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -45,13 +42,13 @@ public class TourController : Controller
         );
     }
 
-/// <summary>
-/// Retrieves all tours based on the specified parameters.
-/// </summary>
-/// <param name="request">The request containing parameters for filtering the tours.</param>
-/// <returns>A list of tours that match the request parameters.</returns>
-/// <response code="200">Returns the list of tours.</response>
-/// <response code="400">The request was invalid.</response>
+    /// <summary>
+    /// Retrieves all tours based on the specified parameters.
+    /// </summary>
+    /// <param name="request">The request containing parameters for filtering the tours.</param>
+    /// <returns>A list of tours that match the request parameters.</returns>
+    /// <response code="200">Returns the list of tours.</response>
+    /// <response code="400">The request was invalid.</response>
     [HttpGet]
     public async Task<IActionResult> GetAll([FromQuery] GetAllToursRequestDto request)
     {
@@ -63,7 +60,6 @@ public class TourController : Controller
             BadRequest
         );
     }
-
 
     /// <summary>
     /// Retrieves the specified tour.

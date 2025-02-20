@@ -2,9 +2,11 @@ using System.Reflection;
 using Application;
 using Domain.Identity;
 using Infrastructure;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using Presentation.Seeding.identity;
+using Presentation.Seeding.Tours;
 using Serilog;
 
 var cors = "LocalOnly";
@@ -115,6 +117,13 @@ if (args.Length > 0 && args[0] == "seedAdmin")
     var scope = app.Services.CreateScope();
     using var context = scope.ServiceProvider.GetRequiredService<UserManager<NormalUser>>();
     await SeedAdmin.SeedAsync(context);
+}
+
+if (args.Length > 0 && args[0] == "seedTours")
+{
+    var scope = app.Services.CreateScope();
+    await using var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await SeedTours.SeedToursData(context);
 }
 
 app.UseHttpsRedirection();

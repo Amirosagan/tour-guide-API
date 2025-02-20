@@ -5,4 +5,4 @@ public record SessionResponseDto(
     DateOnly StartDate,
     DateOnly EndDate,
     int CurrentCapacity
-    );
+);

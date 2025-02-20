@@ -1,5 +1,8 @@
 ﻿using Application.TourCategories.Commands.CreateTourCategory;
 using Application.TourCategories.Commands.RemoveTourCategory;
+using Application.TourCategories.Queries.GetTourCategories;
+using Application.Tours.Queries.GetAllTours;
+
 using AutoMapper;
 using Domain.Enums;
 using MediatR;
@@ -57,5 +60,18 @@ public class TourCategoryController : Controller
 
         var result = await _mediator.Send(command);
         return result.Match<IActionResult>(success => Ok(), BadRequest);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetAll()
+    {
+        var query = new GetTourCategoriesQuery();
+
+        var result = await _mediator.Send(query);
+        
+        return result.Match<IActionResult>(
+            success => Ok(_mapper.Map<GetAllTourCategoriesResponseDto>(success)),
+            BadRequest
+        );
     }
 }

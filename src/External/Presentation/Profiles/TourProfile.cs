@@ -62,11 +62,10 @@ public class TourProfile : Profile
                 opt => opt.MapFrom(src => src.CurrentCapacity)
             );
 
-        CreateMap<TourCategory, CreateTourCategoryResponseDto>()
-            .ForCtorParam(
-                nameof(CreateTourCategoryResponseDto.Name),
-                opt => opt.MapFrom(src => src.Name)
-            );
+        CreateMap<TourCategory, TourCategoryResponseDto>()
+            .ForCtorParam(nameof(TourCategoryResponseDto.Id), opt => opt.MapFrom(src => src.Id))
+            .ForCtorParam(nameof(TourCategoryResponseDto.Name), opt => opt.MapFrom(src => src.Name));
+            
 
         CreateMap<Tour, GetTourResponseDto>()
             .ForCtorParam(nameof(GetTourResponseDto.Id), opt => opt.MapFrom(src => src.Id))
